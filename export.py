@@ -239,9 +239,10 @@ class EngineBuilder:
                         ImageBatcher(calib_input, calib_shape, calib_dtype, max_num_images=calib_num_images,
                                      exact_batches=True))
 
-        with self.builder.build_engine(self.network, self.config) as engine, open(engine_path, "wb") as f:
+        with open(engine_path, "wb") as f:
             print("Serializing engine to file: {:}".format(engine_path))
-            f.write(engine.serialize())
+            engine = self.builder.build_serialized_network(self.network, self.config)
+            f.write(engine)
 
 def main(args):
     builder = EngineBuilder(args.verbose, args.workspace)
